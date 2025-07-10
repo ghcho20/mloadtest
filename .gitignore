@@ -1,0 +1,7 @@
+__pycache__/
+.cache/
+*.log
+.env
+.DS_Store
+.bash_history
+.python_history
