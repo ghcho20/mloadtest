@@ -1,4 +1,3 @@
-locust
 pymongo
 dnspython
 faker

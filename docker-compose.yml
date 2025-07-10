@@ -1,0 +1,17 @@
+services:
+  master:
+    image: locustio/locust:master
+    container_name: locust-alone
+    ports:
+      - "8089:8089"
+    volumes:
+      - ./mlocust:/home/locust
+    environment:
+      - TZ=Asia/Seoul
+      - CLUSTER_URL=${CLUSTER_URL:-mongodb://host.docker.internal:27017}
+    entrypoint:
+      [
+        "/bin/bash",
+        "-c",
+        "pip install -r requirements.txt && locust -f load_test.py",
+      ]
