@@ -1,0 +1,19 @@
+services:
+  master:
+    image: locustio/locust:master
+    container_name: alone
+    ports:
+      - "8089:8089"
+    volumes:
+      - ./mlocust:/home/locust
+    environment:
+      - TZ=Asia/Seoul
+      - CLUSTER_URL=${CLUSTER_URL:-mongodb://host.docker.internal:27017}
+      - DB_NAME=${DB_NAME:-loadtest}
+      - SCAN_COLL_FILLSZ_GB=${SCAN_COLL_FILLSZ_GB:-20}
+    entrypoint:
+      [
+        "/bin/bash",
+        "-c",
+        "pip install -r requirements.txt && locust -f envcheck.py",
+      ]

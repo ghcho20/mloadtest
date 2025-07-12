@@ -1,13 +1,16 @@
 import os
 
-DEFAULTS = {'DB_NAME': 'sample',
+DEFAULTS = {'DB_NAME': 'loadtest',
             'COLLECTION_NAME': 'documents',
             'CLUSTER_URL': f'mongodb+srv://user:password@something.mongodb.net/sample?retryWrites=true&w=majority',
             'DOCS_PER_BATCH': 100,
             'INSERT_WEIGHT': 1,
             'FIND_WEIGHT': 3,
             'BULK_INSERT_WEIGHT': 1,
-            'AGG_PIPE_WEIGHT': 1}
+            'AGG_PIPE_WEIGHT': 1,
+            'COLLECTION_SCAN': 'scancoll',
+            'SCAN_COLL_FILLSZ_GB': 20,
+            }
 
 
 def init_defaults_from_env():

@@ -67,7 +67,7 @@ class MongoSampleUser(MongoUser):
         # prepare the collection
         index1 = pymongo.IndexModel([('first_name', pymongo.ASCENDING), ("last_name", pymongo.DESCENDING)],
                                     name="idx_first_last")
-        self.collection, self.collection_secondary = self.ensure_collection(DEFAULTS['COLLECTION_NAME'], [index1])
+        self.collection, self.collection_secondary = self.ensure_collection('sample', [index1])
         self.name_cache = []
 
     @mongodb_task(weight=int(DEFAULTS['INSERT_WEIGHT']))
