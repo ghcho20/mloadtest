@@ -26,8 +26,9 @@ def mongodb_task(weight=1, batch_size=1):
             start_time = time.time()
             # display the function name as operation name reported in locust stats
             name = func.__name__
+            b_processed = 0
             try:
-                func(self)
+                b_processed = func(self)
             except Exception as e:
                 # output the error for debugging purposes
                 print(e)
@@ -41,7 +42,7 @@ def mongodb_task(weight=1, batch_size=1):
                 # ToDo: find a better way of signaling multiple executions to locust and move away from deprecated APIs
                 for _ in range(batch_size):
                     self.environment.events.request.fire(
-                        request_type='mongodb', name=name, response_time=total_time, response_length=1
+                        request_type='mongodb', name=name, response_time=total_time, response_length=b_processed
                     )
 
         return run_mongodb_operation

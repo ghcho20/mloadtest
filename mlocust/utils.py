@@ -1,6 +1,24 @@
 from faker import Faker
 import bson
 
+def gen_doc(doc_size: int):
+    """
+    Generate a random document with a specified size.
+    :param doc_size: size of the document in bytes
+    :return: a dictionary representing the document
+    """
+    fake = Faker()
+    doc = {
+        'name': fake.name(),
+        'address': fake.address(),
+        'email': fake.email(),
+        'text': fake.text(),
+        'pad': ''
+    }
+    pad_size = doc_size - len(bson.BSON.encode({'_id': bson.objectid.ObjectId(), **doc}))
+    doc['pad'] = 'p' * pad_size if pad_size > 0 else ''
+    return doc
+
 def gen_docs(doc_size: int, batch_size: int):
     """
     Generate a list of random documents
@@ -8,21 +26,7 @@ def gen_docs(doc_size: int, batch_size: int):
     :param batch_size: number of documents to yield at once
     :return: lists of documents
     """
-    fake = Faker()
-    docs = []
-    
-    for _ in range(batch_size):
-        doc = {
-            'name': fake.name(),
-            'address': fake.address(),
-            'email': fake.email(),
-            'text': fake.text(),
-            'pad': ''
-        }
-        pad_size = doc_size - len(bson.BSON.encode(doc))
-        doc['pad'] = 'p' * pad_size if pad_size > 0 else ''
-        docs.append(doc)
-    return docs
+    return [gen_doc(doc_size) for _ in range(batch_size)]
 
 def gen_docs_gb(total_size_gb: float, doc_size: int, batch_size: int):
     """

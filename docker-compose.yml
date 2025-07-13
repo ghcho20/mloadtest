@@ -1,6 +1,7 @@
 services:
   master:
     image: locustio/locust:master
+    platform: linux/${ARCH:-amd64}
     container_name: master
     ports:
       - "8089:8089"
@@ -8,30 +9,39 @@ services:
       - ./mlocust:/home/locust
     environment:
       - TZ=${TZ:-Asia/Seoul}
-      - CLUSTER_URL=${CLUSTER_URL:-mongodb://host.docker.internal:27017}
+      - CLUSTER_URL=${CLUSTER_URL:-mongodb://host.docker.internal:27017/?minPoolSize=200&maxPoolSize=400&readPreference=secondary}
       - DB_NAME=${DB_NAME:-loadtest}
       - COLLECTION_NAME=${COLLECTION_NAME:-rwcoll}
       - COLLECTION_SCAN=${COLLECTION_SCAN:-scancoll}
+      - DOCS_PER_BATCH=${DOCS_PER_BATCH:-10}
+      - DOC_SIZE=${DOC_SIZE:-512}
+      - FIND_WEIGHT=${FIND_WEIGHT:-3}
+      - BULK_INSERT_WEIGHT=${BULK_INSERT_WEIGHT:-1}
     entrypoint:
       [
         "/bin/bash",
         "-c",
-        "pip install -r requirements.txt && locust -f envcheck.py --master",
+        "pip install -r requirements.txt && locust -f load_test.py ${TEST_USERS:-TestUser} --master --profile=${LOCUST_PROFILE:-Default}",
       ]
 
   worker:
     image: locustio/locust:master
+    platform: linux/${ARCH:-amd64}
     volumes:
       - ./mlocust:/home/locust
     environment:
       - TZ=${TZ:-Asia/Seoul}
-      - CLUSTER_URL=${CLUSTER_URL:-mongodb://host.docker.internal:27017}
+      - CLUSTER_URL=${CLUSTER_URL:-mongodb://host.docker.internal:27017/?minPoolSize=200&maxPoolSize=400&readPreference=secondary}
       - DB_NAME=${DB_NAME:-loadtest}
       - COLLECTION_NAME=${COLLECTION_NAME:-rwcoll}
       - COLLECTION_SCAN=${COLLECTION_SCAN:-scancoll}
+      - DOCS_PER_BATCH=${DOCS_PER_BATCH:-10}
+      - DOC_SIZE=${DOC_SIZE:-512}
+      - FIND_WEIGHT=${FIND_WEIGHT:-3}
+      - BULK_INSERT_WEIGHT=${BULK_INSERT_WEIGHT:-1}
     entrypoint:
       [
         "/bin/bash",
         "-c",
-        "pip install -r requirements.txt && locust -f envcheck.py --worker --master-host=master",
+        "pip install -r requirements.txt && locust -f load_test.py ${TEST_USERS:-TestUser} --worker --master-host=master",
       ]
