@@ -79,7 +79,7 @@ class ScanUser(MongoUser):
 
     @mongodb_task(weight=sweight)
     def scan(self):
-        finds = self.coll.find() # collection scan
+        finds = self.coll.find({'pad': 'a'}) # collection scan
         len_docs = 0
         for f in finds: 
             len_docs += len(bson.BSON.encode(f))
