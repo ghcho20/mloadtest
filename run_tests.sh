@@ -21,6 +21,7 @@ function show_menu() {
     echo " 25    doc_size: rand , R: 95% , W:   5%"
     echo
     echo "  0    inserts while doing collection scan" # doc_size: 0, R: 0%, W: 0%
+    echo "100    doc_size: 1M , R:  0% , W: 100%"
 }
 
 function date_time() {
