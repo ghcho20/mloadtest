@@ -40,9 +40,9 @@ function run() {
     export BULK_INSERT_WEIGHT=$4
     export TEST_USERS=$5
     nworkers=${NWORKERS:-8}
-    if [ ${FIND_WEIGHT} -eq 0 ] && [ ${BULK_INSERT_WEIGHT} -eq 0 ]; then
-        nworkers=2
-    fi
+    # if [ ${FIND_WEIGHT} -eq 0 ] && [ ${BULK_INSERT_WEIGHT} -eq 0 ]; then
+    #     nworkers=2
+    # fi
     nohup docker-compose up --scale worker=${nworkers} 2>&1 | tee ${LOCUST_PROFILE}.$(date_time).log &
 }
 
@@ -97,7 +97,10 @@ case $choice in
         run "RND_R95_W5" 0 19 1
         ;;
     0)
-        run "SCANandWR" 512 0 0 "TestUser ScanUser"
+        run "SCANandWR" $((1024*100)) 0 0 "TestUser ScanUser"
+        ;;
+    100)
+        run "1M_R0_W100" $((1024**2)) 0 1
         ;;
     *)
         echo "Please try again. Invalid option: [$choice]"
