@@ -66,7 +66,7 @@ class ScanUser(MongoUser):
     """
     wait_time = between(0.0, 0.0)
     doc_size, docs_per_batch, rweight, wweight, sweight = init_config()
-    fixed_count = 1
+    fixed_count = 15
 
     def __init__(self, environment):
         super().__init__(environment)
