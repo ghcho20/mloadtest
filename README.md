@@ -1,8 +1,17 @@
 ### Contents
 
-**&rarr; [환경 설정](#환경-설정)**  
-**&rarr; [Preloading collection](#preloading-data)**  
-**&rarr; [Load Test](#load-test)**  
+**&rarr; [환경 설정](#환경-설정)**
+
+**&rarr; [Load Test](#load-test)**
+
+> **&rarr; [Preloading collection](#preloading-data)**  
+> **&rarr; [Load Test](#load-test)**
+
+**&rarr; [OLTP Test](#oltp-test)**
+
+> **&rarr; [Preloading OLTP collection](#preloading-oltp-collection)**  
+> **&rarr; [OLTP Test](#oltp-test-1)**
+
 **&rarr; [평가](#evaluation)**
 
 ---
@@ -50,6 +59,8 @@ To redirect container logging to both `stdout` & a file
 `docker-compose -f docker-compose.envcheck.yml down`
 
 ---
+
+## Load Test
 
 ### Preloading data
 
@@ -155,6 +166,23 @@ _Optional_:
 #### Logging
 
 A log file named `<profile name>.<YYYYmmdd>T<HHMMSS>.log` will be put in the folder
+
+## OLTP Test
+
+### Preloading OLTP collection
+
+Default size: `10`GB
+
+#### Steps
+
+- `docker-compose -f docker-compose.envcheck.yml up -d`
+- `docker exec -it alone /bin/bash`
+- `python prepare_oltpcoll.py`
+
+`loadtest.oltp`(db.coll) is created and loaded with docs up to the given total size(default: `10`GB) <br>
+Each doc is `4`KB in bson size
+
+### OLTP Test
 
 ---
 

@@ -13,6 +13,7 @@ def gen_doc(doc_size: int):
         'address': fake.address(),
         'email': fake.email(),
         'text': fake.text(),
+        'filter': fake.random_int(min=1, max=65_536),
         'pad': ''
     }
     pad_size = doc_size - len(bson.BSON.encode({'_id': bson.objectid.ObjectId(), **doc}))

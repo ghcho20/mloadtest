@@ -11,6 +11,9 @@ DEFAULTS = {'DB_NAME': 'loadtest',
             'AGG_PIPE_WEIGHT': 1,
             'COLLECTION_SCAN': 'scancoll',
             'SCAN_COLL_FILLSZ_GB': 20,
+            # OLTP test related settings
+            'OLTP_COLL_FILLSZ_GB': 10,
+            'COLLECTION_OLTP': 'oltp',
             }
 
 
