@@ -16,16 +16,16 @@
 
 ---
 
-### 환경 설정
+## 환경 설정
 
-#### Prerequisites
+### Prerequisites
 
 - docker
 - docker-compose
 - git
 - tee
 
-#### 기본 테스트
+### 기본 테스트
 
 - clone this repo to a local host(load tester)
 - `cd mloadtest`
@@ -48,13 +48,13 @@
     - `Profile`: short description for this run
 - click on `START`
 
-#### Logging
+### Logging
 
 To redirect container logging to both `stdout` & a file
 
 > `docker logs -f <container name> 2>&1 | tee <log file name>`
 
-#### Terminate
+### Terminate
 
 `docker-compose -f docker-compose.envcheck.yml down`
 
@@ -180,15 +180,28 @@ Default size: `10`GB
 - `python prepare_oltpcoll.py`
 
 `loadtest.oltp`(db.coll) is created and loaded with docs up to the given total size(default: `10`GB) <br>
-Each doc is `4`KB in bson size
+Each doc is `2`KB in bson size
 
 ### OLTP Test
 
+Check [Settings](#settings)
+
+- `./run_oltp_tests.sh` <br>
+  then select test scenario
+
+```
+ 1     4K W: 50% , 2K R: 50%
+ 2     8K W: 50% , 2K R: 50%
+ 3    16K W: 50% , 2K R: 50%
+ 4    32K W: 50% , 2K R: 50%
+ 5    64K W: 50% , 2K R: 50%
+```
+
 ---
 
-### Evaluation
+## Evaluation
 
-#### Peak Concurrency
+### Peak Concurrency
 
 For all tests except test`0`, set `Number of users` to big enough number(_eg._ 5000)  
 and see in the Locust `CHARTS` when throughput starts to stall or response time increases.
@@ -198,7 +211,7 @@ and see in the Locust `CHARTS` when throughput starts to stall or response time 
 > - one for inserts(512B)
 > - the other for collection scan
 
-#### Overall Performance
+### Overall Performance
 
 For each test, check Locust `STATISTICS`
 
@@ -206,7 +219,7 @@ For each test, check Locust `STATISTICS`
 ops, #reqs, #fails, times(ms), avg size, RPS, #fails/s
 ```
 
-#### Failover
+### Failover
 
 While running any test, let the Primary **step down** voluntarily  
 and see if failover perfomrs gracefully  

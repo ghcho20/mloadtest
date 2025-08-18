@@ -1,0 +1,39 @@
+services:
+  master:
+    image: locustio/locust:master
+    platform: linux/${ARCH:-amd64}
+    container_name: master
+    ports:
+      - "8089:8089"
+    volumes:
+      - ./mlocust:/home/locust
+    environment:
+      - TZ=${TZ:-Asia/Seoul}
+      - CLUSTER_URL=${CLUSTER_URL:-mongodb://host.docker.internal:27017/?minPoolSize=50&maxPoolSize=100}
+      - DB_NAME=${DB_NAME:-loadtest}
+      - COLLECTION_NAME=${COLLECTION_NAME:-oltpwrite}
+      - DOC_SIZE=${DOC_SIZE:-4096}
+    entrypoint:
+      [
+        "/bin/bash",
+        "-c",
+        "pip install -r requirements.txt && locust -f oltp_test.py --master --profile=${LOCUST_PROFILE:-Default}",
+      ]
+
+  worker:
+    image: locustio/locust:master
+    platform: linux/${ARCH:-amd64}
+    volumes:
+      - ./mlocust:/home/locust
+    environment:
+      - TZ=${TZ:-Asia/Seoul}
+      - CLUSTER_URL=${CLUSTER_URL:-mongodb://host.docker.internal:27017/?minPoolSize=50&maxPoolSize=100}
+      - DB_NAME=${DB_NAME:-loadtest}
+      - COLLECTION_NAME=${COLLECTION_NAME:-oltpwrite}
+      - DOC_SIZE=${DOC_SIZE:-4096}
+    entrypoint:
+      [
+        "/bin/bash",
+        "-c",
+        "pip install -r requirements.txt && locust -f oltp_test.py --worker --master-host=master",
+      ]
